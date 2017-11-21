@@ -1,0 +1,122 @@
+/*
+ * 上传部分
+ */
+.upload-box {
+    display: block;
+    width: 580px;
+}
+
+.inputbox {
+    width: 120px;
+    height: 120px;
+    background-color: #fafafa;
+    border: solid 1px #d1d1d1;
+    position: relative;
+    text-align: center;
+    line-height: 120px;
+    margin-top: 10px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.inputbox input {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.inputbox img {
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.input-add {
+    font-size: 40px;
+}
+
+.main-menutitle .block {
+    display: block !important;
+}
+.upload-ul .delete {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    background-color: #424242;
+    right: 0;
+    color: #fff;
+    font-size: 24px;
+    z-index: 111;
+    display: none;
+}
+.upload-ul li {
+    position: relative;
+}
+/* 弹框 */
+
+.bomb-wp {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1111;
+}
+.bomb-ct {
+    width: 400px;
+    margin: 0 auto;
+    border-radius: 2px;
+    background-color: #fff;
+    padding-top: 45px;
+    position: relative;
+    top: 40%;
+}
+
+.title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #434343;
+    margin-bottom: 40px;
+
+}
+i {
+    display: inline-block;
+    width: 18px;
+    height: 20px;
+    background: url('../../img/notice.png') no-repeat;
+    background-size: cover;
+    margin-right: 12px;
+    vertical-align: middle;
+}
+
+.cue {
+    width: 302px;
+    margin: 0 auto;
+    font-size: 14px;
+    text-align: center;
+    color: #434343;
+    margin-bottom: 39px;
+}
+
+.knowbtn {
+    cursor: pointer;
+    border-top: solid 1px #eaeaea;
+    height: 63px;
+    line-height: 63px;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #434343;
+}
