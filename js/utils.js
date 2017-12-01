@@ -56,25 +56,22 @@ class Utils {
   /*!
    * 上传图片格式验证
    * target 点击的input标签
+   * val 图片大小限制
    * callback 成功回调
    * sizefailcallback 大小不满足回调
    * formatfailcallback 格式不满足回调
-   * var options = {
-      target: target 点击的input标签,
-      maxSize: 图片大小限制,
-      distimg: 显示图片
-    }
+   * distimg 显示图片
    */
   filetype (options, callback) {
     var target = options.target
     var distimg = options.distimg
-    var maxSize = options.maxSize ? 50 : options.maxSize
+    var maxSize = options.maxSize ? options.maxSize : 50
+    var formatArr = options.format ? options.format : ['.PNG', '.PDF', '.JPG', '.JPEG']
     let isIE = /msie/i.test(navigator.userAgent) && !window.opera
     let filepath = $(target).val()
     let extStart = filepath.lastIndexOf('.')
     let ext = filepath.substring(extStart, filepath.length).toUpperCase()
     let fileSize = 0
-    // let url = ''
     if (isIE && target.files.length > 0) {
       // IE浏览器
       let filePath = target.value // 获得上传文件的绝对路径
@@ -89,7 +86,6 @@ class Utils {
     }
     let size = fileSize / 1024 / 1024
     console.log(ext)
-    let formatArr = ['.PNG', '.PDF', '.JPG', '.JPEG']
     let data = {}
     if (formatArr.indexOf(ext) === -1) {
       $(target).val('')
@@ -115,7 +111,7 @@ class Utils {
         distimg.attr('src', e.target.result) // 给图片地址,显示缩略图
         distimg.css('display', 'inline-block') // 样式显示
       }
-      callback('',target)
+      callback('', target)
     }
   }
   /*!
@@ -125,11 +121,11 @@ class Utils {
    */
   createImgli (wp, len) {
     var str = '<li class="inputbox worksimg-li-must">' +
-              '<span class="delete">×</span>' +
-              '<span class="input-add">+</span>' +
-              '<img src="" alt="">' +
-              '<input type="file">' +
-              '</li>'
+      '<span class="delete">×</span>' +
+      '<span class="input-add">+</span>' +
+      '<img src="" alt="">' +
+      '<input type="file">' +
+      '</li>'
     var num = $(wp).find('img').length
     var imgArr = []
     for (var i = 0; i < num; i++) {
@@ -147,6 +143,7 @@ class Utils {
       return false
     }
   }
+
 }
 
 /* eslint-disable */

@@ -1,0 +1,110 @@
+<!-- build:layout_head -->
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta content="webkit" name="renderer" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="UTF-8">
+  <title>progress</title>
+  <meta name="Keywords" content="">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="telephone=no, address=no" name="format-detection">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+
+<body>
+  <style>
+    body{
+      background: #fff;
+    }
+    ul,li{
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    ul.progress {
+      margin: 400px;
+      width: 70px;
+      height: 70px;
+      position: relative;
+    }
+    li.wrap {
+      display: block;
+      width: 35px;
+      height: 70px;
+      float: left;
+      position: relative;
+      overflow: hidden;
+    }
+    li.wrap span {
+      content: ' ';
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      position: absolute;
+      top: 0;
+      left: -35px;
+      border: 10px solid transparent;
+      border-top: 10px solid #ff6d7f;
+      border-right: 10px solid #ff6d7f;
+    }
+    li.wrap.left span {
+      left: auto;
+      right: -35px;
+      border-right: 10px solid transparent;
+      border-top: 10px solid #ff6d7f;
+      border-left: 10px solid #ff6d7f;
+      transform: rotate(-225deg);
+    }
+    li.wrap.right span {
+      transform: rotate(-135deg);
+    }
+    li.txt {
+      position: absolute;
+      width: 70px;
+      height: 70px;
+      top: 0;
+      left: 0;
+      line-height: 70px;
+      text-align: center;
+    }
+  </style>
+  <!-- 上传进度条 -->
+  <ul class="progress">
+    <li class="wrap left">
+      <span></span>
+    </li>
+    <li class="wrap right">
+      <span></span>
+    </li>
+    <li class="txt">75%</li>
+  </ul>
+  <div>内容</div>
+  <script src="js/vendor/jquery-3.2.1.min.js"></script>
+  <script>
+    // 上传进度
+    var progressNum = 0
+    var settime = setInterval(function(){
+      progressNum ++
+      if(progressNum>100){
+        clearInterval(settime)
+        return false
+      }
+      progress(progressNum)
+    },100)   
+    function progress(progressNum){
+      var progress = -135+progressNum*3.6 
+      var progress2 = -225+progressNum*3.6-180 
+      $('.txt').html(progressNum+'%')
+      if(progress<= 45){
+        $('.right span').css('transform', "rotate("+ progress + "deg)")
+      }else{
+        $('.right span').css('transform', "rotate(45deg)")
+        $('.left span').css('transform', "rotate(" + progress2 + "deg)")
+      }
+    }
+  </script>
+</body>
+
+</html>
