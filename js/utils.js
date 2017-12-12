@@ -65,8 +65,10 @@ class Utils {
   filetype (options, callback) {
     var target = options.target
     var distimg = options.distimg
+    var zipimgsrc = options.zipimgsrc
     var maxSize = options.maxSize ? options.maxSize : 50
     var formatArr = options.format ? options.format : ['.PNG', '.PDF', '.JPG', '.JPEG']
+    // console.log(formatArr)
     let isIE = /msie/i.test(navigator.userAgent) && !window.opera
     let filepath = $(target).val()
     let extStart = filepath.lastIndexOf('.')
@@ -95,11 +97,15 @@ class Utils {
       distimg.attr('src', '')
       $(target).siblings('.delete').hide()
       return false
-    } else if (size > maxSize) {
+    }else if (size > maxSize) {
       $(target).val('')
       data.msg = '大小不对'
       callback(data.msg)
       $(target).siblings('.delete').hide()
+      return false
+    } else if(ext==='.RAR' || ext==='.ZIP'){
+      distimg.attr('src', zipimgsrc)
+      callback('', target)
       return false
     } else {
       let file = target.files[0] // 获取file对象单张
@@ -142,6 +148,13 @@ class Utils {
     } else {
       return false
     }
+  }
+  /* 获取url参数 */
+  getUrlParam (name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)")
+    var r = window.location.search.substr(1).match(reg)
+    if (r != null) return unescape(r[2])
+    return null
   }
 
 }
