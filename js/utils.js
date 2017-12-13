@@ -156,7 +156,60 @@ class Utils {
     if (r != null) return unescape(r[2])
     return null
   }
-
+  /*
+   * 分页方法
+   * @param {count} 总条数
+   * @param {page} 当前页
+   * @param {limit=10} 每页条数
+   */
+  getPageArr(count, page, limit=10) {
+    const pages = Math.ceil(count / limit)
+    let result = [1, '...', page - 1, page, page + 1, '...', pages]
+    if (pages <= 5) {
+      result[1] = false
+      result[5] = false
+      for (var i = 1; i <= 7; i++) {
+        if (pages >= i) {
+          result[i - 1] = i
+        } else {
+          result[i - 1] = false
+        }
+      }
+    } else if (pages > 5 && pages <= 7) {
+      if (page <= 4) {
+        result[1] = false
+      } else {
+        result[5] = false
+      }
+    } else if (page == 2) {
+      result[1] = false
+    } else if ((pages - page) == 1) {
+      result[5] = false
+    }
+    return result
+  }
+  /*
+   * 生成分页HTML
+   * @param {pageArr} 分页数组
+   */
+  createPageHtml (pageArr, page) {
+    let pageHtml = `<ul class="pagination pagination-sm">
+        <li><a href="#">«</a></li>`
+    for(let item in pageArr) {
+      if(item && item !=='...') {
+        if(pageArr[item] === page){
+          pageHtml += `<li class="active"><a href="#">${pageArr[item]}</a></li>`
+        }else {
+          pageHtml += `<li><a href="#">${pageArr[item]}</a></li>`
+        }
+      }else if(item) {
+        pageHtml += `<li>${pageArr[item]}</li>`
+      }
+    }
+    pageHtml += `<li><a href="#">»</a></li>
+      </ul>`
+    return pageHtml
+  }
 }
 
 /* eslint-disable */
