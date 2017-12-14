@@ -162,53 +162,110 @@ class Utils {
    * @param {page} 当前页
    * @param {limit=10} 每页条数
    */
-  getPageArr(count, page, limit=10) {
+  getPageArr(count, page, limit = 10) {
     const pages = Math.ceil(count / limit)
-    let result = [1, '...', page - 1, page, page + 1, '...', pages]
-    if (pages <= 5) {
-      result[1] = false
-      result[5] = false
-      for (var i = 1; i <= 7; i++) {
-        if (pages >= i) {
-          result[i - 1] = i
-        } else {
-          result[i - 1] = false
-        }
+    let result = []
+    if (pages <= 3 || page <= 1) {
+      for(let i = 1;i <= pages && i<= 3;i++){
+        result[i-1] = i
       }
-    } else if (pages > 5 && pages <= 7) {
-      if (page <= 4) {
-        result[1] = false
-      } else {
-        result[5] = false
-      }
-    } else if (page == 2) {
-      result[1] = false
-    } else if ((pages - page) == 1) {
-      result[5] = false
+    } else if (page >= pages - 1) {
+      result = [pages-2, pages - 1, pages]
+    }else {
+      result = [page - 1, page, page + 1]
     }
     return result
   }
   /*
    * 生成分页HTML
    * @param {pageArr} 分页数组
+   * @param {page} 当前页
    */
-  createPageHtml (pageArr, page) {
+  createPageHtml(count, page, limit = 10) {
+    let pageArr = this.getPageArr(count, page)
     let pageHtml = `<ul class="pagination pagination-sm">
-        <li><a href="#">«</a></li>`
-    for(let item in pageArr) {
-      if(item && item !=='...') {
-        if(pageArr[item] === page){
-          pageHtml += `<li class="active"><a href="#">${pageArr[item]}</a></li>`
-        }else {
-          pageHtml += `<li><a href="#">${pageArr[item]}</a></li>`
-        }
-      }else if(item) {
-        pageHtml += `<li>${pageArr[item]}</li>`
-      }
+        <li><a data-page="1" href="javascript:;">«</a></li>`
+    for (let item in pageArr) {
+      let active = pageArr[item] === page ? 'active' : ''
+      pageHtml += `<li class="${active}"><a data-page="${pageArr[item]}" href="javascript:;">${pageArr[item]}</a></li>`
     }
-    pageHtml += `<li><a href="#">»</a></li>
+    pageHtml += `<li><a data-page="${Math.ceil(count / limit)}" href="javascript:;">»</a></li>
       </ul>`
     return pageHtml
+  }
+
+  /**         
+   * 时间戳转换日期               
+   * @param <int> unixTime    待时间戳(毫秒)               
+   * @param <bool> isFull    返回完整时间(Y-m-d 或者 Y-m-d H:i:s)               
+   * @param <int>  timeZone   时区               
+   */
+
+  UnixToDate(unixTime, isFull) {
+    var time = new Date(unixTime)
+    var ymdhis = ""
+    ymdhis += time.getUTCFullYear() + "-"
+    ymdhis += (time.getUTCMonth() + 1) + "-"
+    ymdhis += time.getUTCDate()
+    if (isFull === true) {
+      ymdhis += " " + time.getUTCHours() + ":"
+      ymdhis += time.getUTCMinutes() + ":"
+      ymdhis += time.getUTCSeconds()
+    }
+    return ymdhis
+  }
+  /**       
+   * 日期 转换为 Unix时间戳
+   * @param <string> 2014-01-01 20:20:20 日期格式       
+   * @return <int>    unix时间戳(毫秒)       
+   */
+  // DateToUnix (string) {
+  //   var f = string.split(' ', 2);
+  //   var d = (f[0] ? f[0] : '').split('-', 3);
+  //   var t = (f[1] ? f[1] : '').split(':', 3);
+  //   return (new Date(
+  //     parseInt(d[0], 10) || null,
+  //     (parseInt(d[1], 10) || 1) - 1,
+  //     parseInt(d[2], 10) || null,
+  //     parseInt(t[0], 10) || null,
+  //     parseInt(t[1], 10) || null,
+  //     parseInt(t[2], 10) || null
+  //   )).getTime()
+  // }
+  DateToUnix(string) {
+    return new Date(string).valueOf()
+  }
+  /**
+   * 发送ajax请求
+   * @param {*} option 
+   * @param {*} listwp 列表父级
+   * @param {*} paginationwp 分页父级
+   */
+  sendajax (option,callback) {
+    let listwp = option.listwp
+    let paginationwp = option.paginationwp
+    // let that = this
+    $.ajax({
+      type: 'GET',
+      url: option.url,
+      async: false,
+      dataType: 'json',
+      data: option.data, // 参数
+      success: function (data) {
+        console.log(data)
+        let count = data.total // 总条数
+        let page = data.pageIndex
+        let str = utils.createPageHtml(count, page) //生成分页
+        $(paginationwp).html('').append(str)
+        let list = data.data
+        let len = list.length
+        $(listwp).html('')
+        for (let i=0;i<len;i++){
+          let str = callback(list[i])
+          $(listwp).append(str)
+        }
+      }
+    })
   }
 }
 
